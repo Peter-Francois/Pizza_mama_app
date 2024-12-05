@@ -1,0 +1,163 @@
+#:import utils kivy.utils
+#:set color1 "#DD7835"
+
+MainWidget:
+
+<CoverImage@CoverBehavior+Image>:
+    reference_size: self.texture_size
+
+<TitleLabel@FitLabel>:
+    font_size: dp(22)
+    bold: True
+    padding: dp(16), dp(3)
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex(color1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<MainWidget>:
+
+    recycleView: recycleView
+    # ici on veut accéder a la recycleView depuis le fichier Py MainWidget
+    # on a donc aussi créé la propriété objet recycleView dans le MainWidget
+
+    CoverImage:
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 0.6
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        source: "images/menu_background.jpg"
+
+
+    BoxLayout:
+        orientation: "vertical"
+        Image:
+            keep_ratio: True
+            source: "images/small_logo.png"
+            size_hint: None, None
+            size: dp(150), dp(60)
+            allow_stretch: True
+            pos_hint: {"center_x": 0.5}
+
+
+        TitleLabel:
+            text: "Les pizzas"
+
+        BoxLayout:
+            padding: dp(20)
+            RecycleView:
+                id: recycleView
+                viewclass: 'PizzaWidget'
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: "vertical"
+                    spacing: dp(16)
+
+        Label:
+            font_size: dp(12)
+            bold: True
+            text: root.str_error
+            size_hint: 1, None
+            height: dp(30) if len(root.str_error)>0 else 0
+
+            canvas.before:
+                Color:
+                    rgb: 1, 0, 0
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+
+
+
+<PizzaWidget>:
+    BoxLayout:
+        # pour evité que le text ne se superpose lors du rétrécissement de la fenétre, on met une valeur max et min au hint
+        size_hint_max_x: dp(300)
+        size_hint_min_x: dp(150)
+        orientation: "vertical"
+        BoxLayout:
+            spacing: dp(10)
+            FitLabel:
+            # pour changé le nom de la pizza par celui fourni dans les datas : root.nom
+                text: root.nom
+                font_size: dp(22)
+                bold: True
+            Badge:
+                text: "VEGETARIENNE" if root.vegetarienne else ""
+
+        LeftAlignLabel:
+            text: root.ingredients
+            color: utils.get_color_from_hex("#C8B98F")
+
+    FitLabel:
+        color: utils.get_color_from_hex(color1)
+        text: str(root.prix) + "€"
+        font_size: dp(20)
+
+        # on ne peut pas garder les paramétre suivant si on veut que le Label pass en FitLabel
+        # text_size: self.size
+        # halign: "right"
+        # valign: "center"
+        pos_hint: {"top": .9}
+
+
+
+# pour évité les copy paste, on peut cree un "LeftAlignLabel" pour centrer verticalemant et metre a gauche le text
+<LeftAlignLabel@Label>:
+
+    # canvas.before:
+        # Color:
+            # pour donné un couleur aléatoire au label qui utilise LeftAlignLabel :
+            # rgb: utils.get_random_color()
+            # transparent
+            # rgba: 0, 0, 0, 0
+        # Rectangle:
+            # pos: self.pos
+            # size: self.size
+
+    # pour utiliser l'alignement du text il faut déja utiliser un propriété text_size
+    text_size: self.size
+    halign: "left"
+    valign: "center"
+
+
+# on créé un autre Label pour que la taille du label correcpond a la taille de la texture (du contenu)
+<FitLabel@Label>:
+    # on retir le controle de la taille par le boxlayout parent
+    size_hint: None, None
+    size: self.texture_size
+
+# pour afficher le badge végératienne
+<Badge@FitLabel>:
+    # couleur pour le label et non la propriete de canvas
+    color: 0, 0, 0, 1
+    bold: True
+    font_size: dp(10)
+    padding: dp(8), dp(3)
+    canvas.before:
+        Rectangle:
+            source: "images/badge.png"
+            pos: self.pos
+            size: self.size
+
+<TitleLabel@FitLabel>:
+    color: 1, 1, 1, 1
+    font_size: dp(22)
+    bold: True
+    text: "Les Pizzas"
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex(color1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
