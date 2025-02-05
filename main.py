@@ -7,7 +7,13 @@ from kivy.uix.behaviors import CoverBehavior
 from http_client import HttpClient
 from models import Pizza
 from storage_manager import StorageManager
+from navigation_screen_manager import NavigationScreenManager
 
+class Menu(BoxLayout):
+    pass
+
+class MyScreenManager(NavigationScreenManager):
+    pass
 
 class PizzaWidget(BoxLayout):
     # pour affiché le nom de la pizza dans le widget on créé une StringProperty
@@ -17,14 +23,13 @@ class PizzaWidget(BoxLayout):
     vegetarienne = BooleanProperty()
 
 
-
 class MainWidget(FloatLayout):
     recycleView = ObjectProperty(None)
     str_error = StringProperty("")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        HttpClient().get_pizzas(self.on_serveur_data, self.on_server_error)
+        HttpClient().get_pizzas(self.on_server_data, self.on_server_error)
         """self.pizzas = [
             Pizza("4 fromages", "Chèvre, emmental, brie, conté", 9.5, True),
             Pizza("Calzone", "fromage, jambon, champignons", 10, False),
@@ -39,8 +44,7 @@ class MainWidget(FloatLayout):
         if pizzas_dict:
             self.recycleView.data = pizzas_dict
 
-
-    def on_serveur_data(self, pizzas_dict):
+    def on_server_data(self, pizzas_dict):
         self.recycleView.data = pizzas_dict
         StorageManager().save_data("pizzas", pizzas_dict)
 
@@ -52,3 +56,4 @@ class PizzaApp(App):
     pass
 
 PizzaApp().run()
+

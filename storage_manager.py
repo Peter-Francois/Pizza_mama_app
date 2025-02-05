@@ -13,7 +13,6 @@ class StorageManager:
         except:
             return None
 
-
     def save_data(self, data_name, data_content):
         filename = self.get_filename(data_name)
         data_str = json.dumps(data_content)
