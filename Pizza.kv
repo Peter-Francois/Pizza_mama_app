@@ -1,24 +1,45 @@
 #:import utils kivy.utils
 #:set color1 "#DD7835"
 
-MainWidget:
+MyScreenManager:
 
 <MyScreenManager>:
     Screen:
         name: "Menu"
-        Button:
-            text:"to screen Main"
-            on_press: root.push("Main")
+        BoxLayout:
+            orientation: "vertical"
+            spacing: dp(16)
+            Label:
+                text: "Menu"
+                font_size: dp(24)
+                bold: True
+                color: utils.get_color_from_hex(color1)
+            Button:
+                text: "Voir les pizzas"
+                on_press: root.push("Main")
 
     Screen:
         name: "Main"
-        Button:
-            text:"to screen Menu"
-            on_press: root.push("Menu")
+        BoxLayout:
+            orientation: "vertical"
         
-
+            Button:
+                text:"to screen Menu"
+                on_press: root.push("Menu")
+            MainWidget:
+                id: main_widget
+                recycleView: main_widget.recycleView
+            RecycleView:
+                id: recycleView
+                viewclass: 'PizzaWidget'
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: "vertical"
+                    spacing: dp(16)
             
-
 
 <CoverImage@CoverBehavior+Image>:
     reference_size: self.texture_size
@@ -178,13 +199,5 @@ MainWidget:
             pos: self.pos
             size: self.size
 
-<Menu>:
-    name: "menu"
-    BoxLayout:
-        orientation: "vertical"
-        spacing: dp(16)
-        Label:
-            text: "Menu"
-            font_size: dp(24)
-            bold: True
-            color: utils.get_color_from_hex(color1)
+
+    

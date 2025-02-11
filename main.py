@@ -35,14 +35,16 @@ class MainWidget(FloatLayout):
             Pizza("Calzone", "fromage, jambon, champignons", 10, False),
             Pizza("Chorizo", "Tomate, chorizo, jambon, parmesan", 11.2, False)
         ]"""
-
+    def on_recycleView(self, instance, value):
+        # This method will be called when recycleView is set
+        if value is not None:
+            pizzas_dict = StorageManager().load_data("pizzas")
+            if pizzas_dict:
+                self.recycleView.data = pizzas_dict
     # on vient créé une fonction on_parent qui est la fonction qui assure que le fichier kv a été
     # rajouté au parent et on charge les datas dans la recycleView
     # ici les data vienne du fichier pizzas.json qui sauvgarde a chaque ouverture les données du serveur
-    def on_parent(self, widget, parent):
-        pizzas_dict = StorageManager().load_data("pizzas")
-        if pizzas_dict:
-            self.recycleView.data = pizzas_dict
+
 
     def on_server_data(self, pizzas_dict):
         self.recycleView.data = pizzas_dict
